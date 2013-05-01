@@ -227,7 +227,7 @@
                 }; //end onDrop function
            
                 var drop_config = {
-                  tolerance  	: "pointer",
+                  tolerance      : "pointer",
                   hoverClass		: "d2lt_hover",
                   drop			: onDragDrop
                 };
@@ -270,7 +270,7 @@
                      tolerance    	: "pointer",
                      hoverClass		: "d2lt_hover",
                      drop			: function(event, ui){
-                     		  var dropped = ui.draggable;
+                     		   var dropped = ui.draggable;
                               dropped.css({top: 0, left: 0});
                               
                               
@@ -302,7 +302,7 @@
                                              if (child_lis.size() == 0){
                                                  liOldParent.addClass('d2lt_draggable');
                                              }
-                              }
+                              };
                               var delete_now = true;
                               if (typeof(opts.onDeleteZoneDrop) == 'function'){
                                   delete_now = opts.onDeleteZoneDrop(liDropped, $(this));
@@ -310,7 +310,7 @@
                               if (delete_now){
                                   fnDeleteDraggedNode();    
                               }else{
-                                  cache[$this.attr('id')]['fnCompleteDelete'] = fnDeleteDraggedNode();
+                                  cache[$this.attr('id')]['fnCompleteDelete'] = fnDeleteDraggedNode;
                               }
                      }
             	   });
