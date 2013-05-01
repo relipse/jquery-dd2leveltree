@@ -128,13 +128,14 @@
                      var liOldParent = liParentDropped;
                      
                      var spnParentDropped = false;
-                     var parentIsRoot = true;
+                     var parentIsRoot = liParentDropped.data('d2lt_item') != 'root';
+                     /*
                      if (liParentDropped.length > 0){
                         if (liParentDropped[0].tagName == 'LI'){
                            spnParentDropped = $('span:first-child', liParentDropped);
                            parentIsRoot = false;
                         }
-                     } 
+                     }*/ 
                      
                      var me = $(this).parent();
                      var liNewParent = me;
@@ -283,17 +284,20 @@
                                    opts.DELETE_DROP_ZONE.hide();
                               }
                               
-                              var dropped = ui.draggable;
-                              dropped.css({top: 0, left: 0});
+                              var liDropped = ui.draggable;
+                              if (!liDropped.hasClass('d2lt_draggable')){
+                                  //anything not draggable cannot be deleted
+                                  return;
+                              }
                               
+                              liDropped.css({top: 0, left: 0});
                               
-                              var liDropped = dropped;
                               var spnDropped = $('span:first-child', liDropped);
                               //                      <li>    <ul>     <li>
                               var liParentDropped = liDropped.parent().parent();
                               var liOldParent = liParentDropped;
                               
-                              var oldParent = dropped.parent();
+                              var oldParent = liDropped.parent();
                               
                               var fnDeleteDraggedNode = function (){
                                        
@@ -316,7 +320,6 @@
                                              //if the old parent has no more children, make it draggable
                                              if (child_lis.size() == 0){
                                                  liOldParent.addClass('d2lt_draggable');
-                                                 
                                              }
                               };
                               var delete_now = true;
