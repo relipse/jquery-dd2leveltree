@@ -38,6 +38,11 @@
                          $nwparent_ul = $nwparent;
                      }else if ($nwparent.is('li')){
                          $nwparent_ul = $nwparent.find('> ul:first');
+                         if ($nwparent_ul.length == 0){
+                             $nwparent_ul = $nwparent.append('<ul></ul>')
+                         }
+                     }else{
+                         return true;
                      }
                      
                      var $nwli = false;
@@ -47,7 +52,7 @@
                          $nwli = $li;
                      }
                     
-                     $('ul$nwparent.prepend($nwli);
+                     $nwparent_ul.prepend($nwli);
            }); 
         }
         function init($trees, opts){
