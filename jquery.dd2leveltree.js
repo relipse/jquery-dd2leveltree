@@ -86,7 +86,7 @@
         }
         if (opts === 'init'){ init($(this), cache[$(this).attr('id')]['opts']); return $(this); }
         if (opts === 'completeDragDrop'){ cache[$(this).attr('id')]['fnCompleteDragDrop'](); return $(this); }
-        if (opts === 'completeDelete'){  cache[$(this).attr('id')]['fnCompleteDelete']();
+        if (opts === 'completeDelete'){ cache[$(this).attr('id')]['fnCompleteDelete'](); return $(this); }
         
         
         if (!opts){ opts = {} }
@@ -150,7 +150,7 @@
                         return;
                      }
                      
-                    //the below should never get called because it is stopped in the onDrag function
+                    //the below should never get called because it is stopped in the onDragDrop function
                     //but we'll go ahead and check just in case
                      if (!liDropped.hasClass('d2lt_draggable')){
                          //console.log('this is not not draggable');
@@ -327,7 +327,5 @@
         }
         
         return $(this);
-        }
-    
-    }//end dd2leveltree plugin
+   }//end dd2leveltree plugin
 })(jQuery);
