@@ -53,7 +53,8 @@
                      }
                     
                      $nwparent_ul.prepend($nwli);
-           }); 
+           });
+           init($trees);
         }
         function init($trees, opts){
             $trees.each(function(){ 
