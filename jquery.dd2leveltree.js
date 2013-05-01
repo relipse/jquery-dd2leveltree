@@ -55,7 +55,9 @@
                      $nwparent_ul.prepend($nwli);
            });
            init($trees);
+           init_dragdrop($trees);
         }
+        
         function init($trees, opts){
             $trees.each(function(){ 
                      var $this = $(this);
