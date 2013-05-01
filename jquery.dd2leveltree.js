@@ -309,6 +309,8 @@
                               }
                               if (delete_now){
                                   fnDeleteDraggedNode();    
+                              }else{
+                                  cache[$this.attr('id')]['fnCompleteDelete'] = fnDeleteDraggedNode();
                               }
             	   });
             }
