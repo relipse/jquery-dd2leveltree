@@ -327,5 +327,7 @@
         }
         
         return $(this);
-    }
+        }
+    
+    }//end dd2leveltree plugin
 })(jQuery);
