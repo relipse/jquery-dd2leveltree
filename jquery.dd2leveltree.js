@@ -296,11 +296,14 @@
                                              
                                              liDropped.remove();
                                              
+                                            
+                                             
                                              var child_lis = liOldParent.find('li');
-            
+                                             console.log('num children of old parent: ' + child_lis.size());
                                              //if the old parent has no more children, make it draggable
                                              if (child_lis.size() == 0){
                                                  liOldParent.addClass('d2lt_draggable');
+                                                 
                                              }
                               };
                               var delete_now = true;
