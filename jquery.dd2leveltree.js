@@ -212,7 +212,7 @@
             
                               //if the old parent has no more children, make it draggable
                               if (child_lis.size() == 0){
-                                  liOldParent.addClass('draggable');
+                                  liOldParent.addClass('d2lt_draggable');
                               }
                         };//fnCompleteDrag
 
