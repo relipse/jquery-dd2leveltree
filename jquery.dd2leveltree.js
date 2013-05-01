@@ -32,8 +32,14 @@
                          //make new parent root
                          $nwparent = $('li:first',$this);
                      }
-                     
-                     $nwparent.prepend($li);
+                     var $nwli = false;
+                     if (typeof($li) == 'string'){
+                         $nwli = $('<li><span>'+ $li + '</span></li>');
+                     }else{
+                         $nwli = $li;
+                     }
+                    
+                     $nwparent.prepend($nwli);
            }); 
         }
         function init($trees, opts){
@@ -113,7 +119,8 @@
         if (opts === 'init'){ init($(this), cache[$(this).attr('id')]['opts']); return $(this); }
         if (opts === 'completeDragDrop'){ cache[$(this).attr('id')]['fnCompleteDragDrop'](); return $(this); }
         if (opts === 'completeDelete'){ cache[$(this).attr('id')]['fnCompleteDelete'](); return $(this); }
-        if (opts == 'addChild'){ add_no
+        //                                $tree    $li          $parent = root
+        if (opts == 'addChild'){ add_node($(this), arguments[0], arguments[1]); return $(this); }
         
         
         if (!opts){ opts = {} }
