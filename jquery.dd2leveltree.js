@@ -314,7 +314,7 @@
                               }
                      }
             	   });
-            }//end foreach tree
+            });//end foreach tree
         }//end init delete zone
         
         var $this = $(this);
