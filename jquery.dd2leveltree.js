@@ -30,8 +30,16 @@
                          $nwparent = $parent;
                      }else{
                          //make new parent root
-                         $nwparent = $('li:first',$this);
+                         $nwparent = $this.find('> li:first');
                      }
+                     
+                     var $nwparent_ul = false;
+                     if ($nwparent.is('ul')){
+                         $nwparent_ul = $nwparent;
+                     }else if ($nwparent.is('li')){
+                         $nwparent_ul = $nwparent.find('> ul:first');
+                     }
+                     
                      var $nwli = false;
                      if (typeof($li) == 'string'){
                          $nwli = $('<li><span>'+ $li + '</span></li>');
@@ -39,7 +47,7 @@
                          $nwli = $li;
                      }
                     
-                     $nwparent.prepend($nwli);
+                     $('ul$nwparent.prepend($nwli);
            }); 
         }
         function init($trees, opts){
