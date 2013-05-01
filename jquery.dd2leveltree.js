@@ -312,9 +312,10 @@
                               }else{
                                   cache[$this.attr('id')]['fnCompleteDelete'] = fnDeleteDraggedNode();
                               }
+                     }
             	   });
-            }
-        }
+            }//end foreach tree
+        }//end init delete zone
         
         var $this = $(this);
         
