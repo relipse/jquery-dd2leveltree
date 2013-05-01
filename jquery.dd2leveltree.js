@@ -10,6 +10,32 @@
     var cache = {};
     var z = 100; //make z index start at 100 and increase during each drag drop operation
     jQuery.fn.dd2leveltree = function(opts){ 
+        function add_node($trees, $li, $parent){
+           $trees.each(function(){ 
+                     var $this = $(this);
+                     if (!$this.is('ul') || !$this.attr('id') || !cache[$this.attr('id')]){ 
+                           //alert('d2lt is only available on a ul with an id');    
+                           return true; 
+                     }
+                     var $nwparent = false;
+                     if ($parent){
+                         if ($parent.is('li')){
+                             //parent is not a li element
+                             return true;
+                         }
+                         if ($this.has($parent).length == 0){
+                             //parent does not exist
+                             return true;
+                         }
+                         $nwparent = $parent;
+                     }else{
+                         //make new parent root
+                         $nwparent = $('li:first',$this);
+                     }
+                     
+                     $nwparent.prepend($li);
+           }); 
+        }
         function init($trees, opts){
             $trees.each(function(){ 
                      var $this = $(this);
@@ -87,6 +113,7 @@
         if (opts === 'init'){ init($(this), cache[$(this).attr('id')]['opts']); return $(this); }
         if (opts === 'completeDragDrop'){ cache[$(this).attr('id')]['fnCompleteDragDrop'](); return $(this); }
         if (opts === 'completeDelete'){ cache[$(this).attr('id')]['fnCompleteDelete'](); return $(this); }
+        if (opts == 'addChild'){ add_no
         
         
         if (!opts){ opts = {} }
