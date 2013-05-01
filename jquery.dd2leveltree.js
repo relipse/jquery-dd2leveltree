@@ -17,6 +17,8 @@
                            alert('d2lt is only available on a ul with an id');    
                            return true; 
                      }
+                     
+                     $this.addClass('d2lt');
                 
                      if (!cache[$this.attr('id')]){
                          cache[$this.attr('id')] = {opts: false};
