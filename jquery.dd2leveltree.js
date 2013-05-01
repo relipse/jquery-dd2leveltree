@@ -84,15 +84,19 @@
                        
                    });            
         }
-        if (opts === 'init'){ init($(this), myopts); return $(this); }
-        if (opts === 'completeDrag'){ cache[$(this).attr('id')]['fnCompleteDrag'](); return $(this); }
+        if (opts === 'init'){ init($(this), cache[$(this).attr('id')]['opts']); return $(this); }
+        if (opts === 'completeDragDrop'){ cache[$(this).attr('id')]['fnCompleteDragDrop'](); return $(this); }
+        if (opts === 'completeDelete'){  cache[$(this).attr('id')]['fnCompleteDelete']();
         
         
         if (!opts){ opts = {} }
         // Create some defaults, extending them with any options that were provided
         opts = $.extend( {
-          'EVERY_LI_IS_ITEM': true,
-            'z-start': false
+            'EVERY_LI_IS_ITEM': true, //should be true unless self-specifying all d2lt classes
+            'z-start': false, //can start z value as high as you want, will start at 101 automatically
+            'DELETE_DROP_ZONE': false, //can the user drop to a delete target?
+            'onDragDrop': null, //intercept when dragging and dropping onto another node
+            'onDeleteZoneDrop': null //intercept when dropping onto a delete drop zone
         }, opts);
         
         if (opts['z-start']){ z = opts['z-start']; }
@@ -110,7 +114,7 @@
                 } 
                 var opts = cache[$this.attr('id')]['opts'];
                                 
-                var onDrop = function(event, ui){
+                var onDragDrop = function(event, ui){
                     var liDropped = ui.draggable;
                     liDropped.css({top: 0, left: 0});
         
@@ -139,17 +143,17 @@
                         return;
                      }
                      
-                     console.log('Dropping "' +  spnDropped.html() + '"(' + liDropped.attr('id') +') onto "' + spnNewParent.html() + '"(' + liNewParent.attr('id') +')'); 
+                     //console.log('Dropping "' +  spnDropped.html() + '"(' + liDropped.attr('id') +') onto "' + spnNewParent.html() + '"(' + liNewParent.attr('id') +')'); 
                      
                      if (!liNewParent.hasClass('d2lt_droppable')){
-                        console.log('cannot drop on this parent');
+                        //console.log('cannot drop on this parent');
                         return;
                      }
                      
                     //the below should never get called because it is stopped in the onDrag function
                     //but we'll go ahead and check just in case
                      if (!liDropped.hasClass('d2lt_draggable')){
-                         console.log('this is not not draggable');
+                         //console.log('this is not not draggable');
                          return; //don't let it drag if not draggable
                      }
                      
@@ -165,11 +169,11 @@
                      }
         
                     var complete_drag = true;
-                    if (typeof(opts.onDrop) == 'function'){
-                        complete_drag = opts.onDrop(liDropped, liNewParent);
+                    if (typeof(opts.onDragDrop) == 'function'){
+                        complete_drag = opts.onDragDrop(liDropped, liNewParent);
                     }
                     
-                    fnCompleteDrag = function(){
+                    fnCompleteDragDrop = function(){
                               var subbranch = $(me).children("ul");
                               if(subbranch.size() == 0) {
                                  me.find("span").after("<ul></ul>");
@@ -211,21 +215,21 @@
                                   liOldParent.addClass('draggable');
                               }
                         };//fnCompleteDrag
-                    console.log('complete_drag: ' + complete_drag);
+
                     if (complete_drag){ 
-                         fnCompleteDrag();                 
+                         fnCompleteDragDrop();                 
                      }else{
                         //else user will complete this later on his own
                      }
                      //store this in cache so user can later on complete the drag
-                     cache[$this.attr('id')]['fnCompleteDrag'] = fnCompleteDrag;
+                     cache[$this.attr('id')]['fnCompleteDragDrop'] = fnCompleteDragDrop;
                     
                 }; //end onDrop function
            
                 var drop_config = {
                   tolerance  	: "pointer",
                   hoverClass		: "d2lt_hover",
-                  drop			: onDrop
+                  drop			: onDragDrop
                 };
                 
                 //make all tree items droppable (not really though see d2lt_draggable and d2lt_droppable
@@ -253,10 +257,71 @@
             });
         }
         
+        function init_deletezone($trees, $deletezone){
+            $trees.each(function(){
+                var $this = $(this);
+                
+                if (!$this.is('ul') || !$this.attr('id') || !cache[$this.attr('id')]){ 
+                           return true; 
+                } 
+                var opts = cache[$this.attr('id')]['opts'];
+                
+                $deletezone.droppable({
+                     tolerance    	: "pointer",
+                     hoverClass		: "d2lt_hover",
+                     drop			: function(event, ui){
+                     		  var dropped = ui.draggable;
+                              dropped.css({top: 0, left: 0});
+                              
+                              
+                              var liDropped = dropped;
+                              var spnDropped = $('span:first-child', liDropped);
+                              //                      <li>    <ul>     <li>
+                              var liParentDropped = liDropped.parent().parent();
+                              var liOldParent = liParentDropped;
+                              
+                              var oldParent = dropped.parent();
+                              
+                              var fnDeleteDraggedNode = function (){
+                                       
+                                             var oldBranches = $("li", oldParent);
+                                             
+                                             if (oldBranches.size() == 0) { 
+                                                $(oldParent).remove(); 
+                                             }else if (oldBranches.size() == 1){
+                                                //if 1 branch, and we are removing it....
+                                                //console.log('enable draggable');
+                                                $(oldParent).addClass('d2lt_draggable');
+                                             }
+                                             
+                                             liDropped.remove();
+                                             
+                                             var child_lis = liOldParent.find('li');
+            
+                                             //if the old parent has no more children, make it draggable
+                                             if (child_lis.size() == 0){
+                                                 liOldParent.addClass('d2lt_draggable');
+                                             }
+                              }
+                              var delete_now = true;
+                              if (typeof(opts.onDeleteZoneDrop) == 'function'){
+                                  delete_now = opts.onDeleteZoneDrop(liDropped, $(this));
+                              }
+                              if (delete_now){
+                                  fnDeleteDraggedNode();    
+                              }
+            	   });
+            }
+        }
+        
         var $this = $(this);
         
         init($this, opts);
         init_dragdrop($this);
+        
+        if (opts.DELETE_DROP_ZONE){
+           init_deletezone(opts.DELETE_DROP_ZONE);
+        }
         
         return $(this);
     }
