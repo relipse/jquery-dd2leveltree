@@ -95,6 +95,7 @@
             'EVERY_LI_IS_ITEM': true, //should be true unless self-specifying all d2lt classes
             'z-start': false, //can start z value as high as you want, will start at 101 automatically
             'DELETE_DROP_ZONE': false, //can the user drop to a delete target?
+            'DELETE_ZONE_APPEARS_ON_DRAG': false, //the delete drop zone appears when dragging
             'onDragDrop': null, //intercept when dragging and dropping onto another node
             'onDeleteZoneDrop': null //intercept when dropping onto a delete drop zone
         }, opts);
@@ -115,6 +116,9 @@
                 var opts = cache[$this.attr('id')]['opts'];
                                 
                 var onDragDrop = function(event, ui){
+                    if (opts.DELETE_DROP_ZONE  && opts.DELETE_ZONE_APPEARS_ON_DRAG){
+                       opts.DELETE_DROP_ZONE.hide();
+                    }
                     var liDropped = ui.draggable;
                     liDropped.css({top: 0, left: 0});
         
@@ -246,8 +250,13 @@
                            ui.helper.css('opacity', 1);
                            event.preventDefault();
                            return false;
-                        }            
+                        }           
+                        
                         $(this).css("z-index", z++); 
+                        
+                        if (opts.DELETE_DROP_ZONE  && opts.DELETE_ZONE_APPEARS_ON_DRAG){
+                           opts.DELETE_DROP_ZONE.show();
+                        }
                      }
                 }
                 
@@ -327,6 +336,9 @@
         
         if (opts.DELETE_DROP_ZONE){
            init_deletezone($this, opts.DELETE_DROP_ZONE);
+           if (opts.DELETE_ZONE_APPEARS_ON_DRAG){
+               opts.DELETE_DROP_ZONE.hide();
+           }
         }
         
         return $(this);
