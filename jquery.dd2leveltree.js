@@ -279,7 +279,11 @@
                      tolerance    	: "pointer",
                      hoverClass		: "d2lt_hover",
                      drop			: function(event, ui){
-                     		   var dropped = ui.draggable;
+                     		  if (opts.DELETE_DROP_ZONE  && opts.DELETE_ZONE_APPEARS_ON_DRAG){
+                                   opts.DELETE_DROP_ZONE.hide();
+                              }
+                              
+                              var dropped = ui.draggable;
                               dropped.css({top: 0, left: 0});
                               
                               
