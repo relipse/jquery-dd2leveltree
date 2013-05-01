@@ -1,6 +1,9 @@
 jquery-dd2leveltree
 ===================
 
+See the latest code in action here with a pretty treeview:
+http://jsfiddle.net/relipse/94PYZ/
+
 Drag-Drop 2-Level Tree
 
 Go ahead and create some html:
