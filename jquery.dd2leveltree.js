@@ -255,7 +255,7 @@
                
                 //drag and droppability is complete               
             });
-        }
+        }//end init_dragdrop()
         
         function init_deletezone($trees, $deletezone){
             $trees.each(function(){
@@ -315,7 +315,7 @@
                      }
             	   });
             });//end foreach tree
-        }//end init delete zone
+        }//end init_delete_zone
         
         var $this = $(this);
         
@@ -323,7 +323,7 @@
         init_dragdrop($this);
         
         if (opts.DELETE_DROP_ZONE){
-           init_deletezone(opts.DELETE_DROP_ZONE);
+           init_deletezone($this, opts.DELETE_DROP_ZONE);
         }
         
         return $(this);
